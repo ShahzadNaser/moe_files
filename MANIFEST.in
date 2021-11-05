@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include moe_files *.css
+recursive-include moe_files *.csv
+recursive-include moe_files *.html
+recursive-include moe_files *.ico
+recursive-include moe_files *.js
+recursive-include moe_files *.json
+recursive-include moe_files *.md
+recursive-include moe_files *.png
+recursive-include moe_files *.py
+recursive-include moe_files *.svg
+recursive-include moe_files *.txt
+recursive-exclude moe_files *.pyc
