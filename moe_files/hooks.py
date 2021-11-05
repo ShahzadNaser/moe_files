@@ -173,3 +173,14 @@ user_data_fields = [
 # 	"moe_files.auth.validate"
 # ]
 
+
+override_whitelisted_methods = {
+	'frappe.handler.upload_file' : 'moe_files.handler.upload_file'
+}
+
+doc_events = {
+	"File": {
+		"validate" : "moe_files.handler.before_save_file",
+		"before_save" : "moe_files.handler.before_save_file",
+	}
+}
