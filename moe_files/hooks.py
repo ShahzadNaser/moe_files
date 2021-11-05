@@ -169,9 +169,9 @@ user_data_fields = [
 # Authentication and authorization
 # --------------------------------
 
-# auth_hooks = [
-# 	"moe_files.auth.validate"
-# ]
+before_write_file = [
+	"moe_files.handler.before_write_file"
+]
 
 
 override_whitelisted_methods = {
@@ -180,7 +180,7 @@ override_whitelisted_methods = {
 
 doc_events = {
 	"File": {
-		"validate" : "moe_files.handler.before_save_file",
+		"before_validate" : "moe_files.handler.before_save_file",
 		"before_save" : "moe_files.handler.before_save_file",
 	}
 }
