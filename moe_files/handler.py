@@ -6,8 +6,10 @@ from __future__ import unicode_literals
 
 import frappe
 import frappe.utils
-from frappe.utils import cint
+from frappe.utils import cint, get_files_path
 from frappe import _, is_whitelisted
+import os
+from six import text_type
 
 ALLOWED_MIMETYPES = ('image/png', 'image/jpeg', 'application/pdf', 'application/msword',
 			'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -71,6 +73,29 @@ def upload_file():
 		ret.save(ignore_permissions=ignore_permissions)
 		return ret
 
-
 def before_save_file(doc, method):
     doc.is_private = 1
+
+def before_write_file(file_size):
+    from frappe.core.doctype.file.file import File
+    File.write_file = write_file
+
+def write_file(self):
+	"""write file to disk with a random name (to compare)"""
+	self.is_private = 1
+	file_path = get_files_path(is_private=self.is_private)
+
+	if os.path.sep in self.file_name:
+		frappe.throw(_('File name cannot have {0}').format(os.path.sep))
+
+	# create directory (if not exists)
+	frappe.create_folder(file_path)
+	# write the file
+	self.content = self.get_content()
+	if isinstance(self.content, text_type):
+		self.content = self.content.encode()
+
+	with open(os.path.join(file_path.encode('utf-8'), self.file_name.encode('utf-8')), 'wb+') as f:
+		f.write(self.content)
+
+	return get_files_path(self.file_name, is_private=self.is_private)
